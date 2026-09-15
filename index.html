@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="ko">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>SCHOOL MATE</title>
+  <meta name="description" content="학교생활 통합 웹사이트 - 시간표, 내신 등급 계산기, 시설물 길찾기" />
+  <link rel="stylesheet" href="./css/style.css" />
+  <link rel="stylesheet" href="./css/components.css" />
+  <link rel="manifest" href="/manifest.json" />
+  <style>
+    /* 홈 전용 스타일 */
+
+    /* 히어로 섹션 */
+    .hero {
+      background: linear-gradient(135deg, #4F46E5 0%, #7C3AED 50%, #06B6D4 100%);
+      border-radius: var(--radius-xl);
+      padding: var(--spacing-2xl) var(--spacing-xl);
+      color: white;
+      text-align: center;
+      position: relative;
+      overflow: hidden;
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .hero::before {
+      content: '';
+      position: absolute;
+      top: -60px;
+      right: -60px;
+      width: 220px;
+      height: 220px;
+      background: rgba(255,255,255,0.07);
+      border-radius: 50%;
+    }
+
+    .hero::after {
+      content: '';
+      position: absolute;
+      bottom: -80px;
+      left: -40px;
+      width: 280px;
+      height: 280px;
+      background: rgba(255,255,255,0.05);
+      border-radius: 50%;
+    }
+
+    .hero-emoji {
+      font-size: 3rem;
+      margin-bottom: var(--spacing-md);
+      display: block;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 2.5rem;
+      font-weight: 900;
+      letter-spacing: -1.5px;
+      margin-bottom: var(--spacing-sm);
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title span {
+      color: rgba(255,255,255,0.7);
+      font-weight: 400;
+      font-size: 1.1rem;
+      letter-spacing: 0.2em;
+      display: block;
+      margin-bottom: var(--spacing-xs);
+      text-transform: uppercase;
+    }
+
+    .hero-desc {
+      font-size: 1rem;
+      opacity: 0.85;
+      position: relative;
+      z-index: 1;
+      max-width: 420px;
+      margin: 0 auto;
+      line-height: 1.7;
+    }
+
+    /* 기능 카드 그리드 */
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(260px, 1fr));
+      gap: var(--spacing-lg);
+      margin-bottom: var(--spacing-xl);
+    }
+
+    .feature-card {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-xl);
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm);
+      cursor: pointer;
+      transition: all 0.25s ease;
+      text-decoration: none;
+      display: block;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .feature-card::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      height: 4px;
+      border-radius: var(--radius-lg) var(--radius-lg) 0 0;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-4px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card.timetable::before { background: var(--color-timetable); }
+    .feature-card.grade::before     { background: var(--color-grade); }
+    .feature-card.facility::before  { background: var(--color-facility); }
+
+    .feature-icon {
+      width: 56px;
+      height: 56px;
+      border-radius: var(--radius-md);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 1.6rem;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .feature-card.timetable .feature-icon { background: #D1FAE5; }
+    .feature-card.grade .feature-icon     { background: #FEF3C7; }
+    .feature-card.facility .feature-icon  { background: #FEE2E2; }
+
+    .feature-title {
+      font-size: 1.1rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: var(--spacing-xs);
+    }
+
+    .feature-desc {
+      font-size: 0.875rem;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      margin-bottom: var(--spacing-md);
+    }
+
+    .feature-arrow {
+      display: flex;
+      align-items: center;
+      gap: 4px;
+      font-size: 0.8rem;
+      font-weight: 600;
+      transition: gap 0.2s ease;
+    }
+
+    .feature-card.timetable .feature-arrow { color: var(--color-timetable); }
+    .feature-card.grade .feature-arrow     { color: var(--color-grade); }
+    .feature-card.facility .feature-arrow  { color: var(--color-facility); }
+
+    .feature-card:hover .feature-arrow {
+      gap: 8px;
+    }
+
+    /* 하단 안내 섹션 */
+    .info-section {
+      background: var(--bg-card);
+      border-radius: var(--radius-lg);
+      padding: var(--spacing-lg);
+      border: 1px solid var(--gray-100);
+      box-shadow: var(--shadow-sm);
+      display: flex;
+      align-items: center;
+      gap: var(--spacing-md);
+    }
+
+    .info-icon {
+      font-size: 2rem;
+      flex-shrink: 0;
+    }
+
+    .info-text strong {
+      display: block;
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: var(--text-primary);
+      margin-bottom: 2px;
+    }
+
+    .info-text p {
+      font-size: 0.85rem;
+      color: var(--text-secondary);
+    }
+
+    @media (max-width: 768px) {
+      .hero {
+        padding: var(--spacing-xl) var(--spacing-lg);
+        border-radius: var(--radius-lg);
+      }
+
+      .hero-title {
+        font-size: 1.9rem;
+      }
+
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .info-section {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero {
+        padding: var(--spacing-lg) var(--spacing-md);
+        border-radius: var(--radius-md);
+      }
+
+      .hero-emoji {
+        font-size: 2.2rem;
+      }
+
+      .hero-title {
+        font-size: 1.6rem;
+        letter-spacing: -1px;
+      }
+
+      .hero-title span {
+        font-size: 0.85rem;
+      }
+
+      .hero-desc {
+        font-size: 0.9rem;
+      }
+
+      .feature-card {
+        padding: var(--spacing-lg);
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <!-- 네비게이션 -->
+  <nav class="navbar">
+    <div class="navbar-inner">
+      <a href="index.html" class="navbar-logo">
+        <div class="logo-icon">🎓</div>
+        SCHOOL MATE
+      </a>
+      <ul class="navbar-nav">
+        <li><a href="index.html" class="nav-link active">홈</a></li>
+        <li><a href="timetable.html" class="nav-link">시간표</a></li>
+        <li><a href="grade-calculator.html" class="nav-link">내신 계산기</a></li>
+        <li><a href="facility-finder/index.html" class="nav-link">시설물 찾기</a></li>
+      </ul>
+      <button class="navbar-toggle" id="navToggle" aria-label="메뉴 열기">
+        <span></span>
+        <span></span>
+        <span></span>
+      </button>
+    </div>
+    <!-- 모바일 메뉴 -->
+    <div class="navbar-mobile-menu" id="mobileMenu">
+      <a href="index.html" class="nav-link active">🏠 홈</a>
+      <a href="timetable.html" class="nav-link">📅 시간표</a>
+      <a href="grade-calculator.html" class="nav-link">📊 내신 계산기</a>
+      <a href="facility-finder/index.html" class="nav-link">🗺️ 시설물 찾기</a>
+    </div>
+  </nav>
+
+  <!-- 메인 콘텐츠 -->
+  <main class="page-wrapper">
+    <div class="container">
+
+      <!-- 히어로 -->
+      <section class="hero">
+        <span class="hero-emoji">🎓</span>
+        <h1 class="hero-title">
+          <span>Welcome to</span>
+          SCHOOL MATE
+        </h1>
+        <p class="hero-desc">
+          시간표 확인부터 내신 등급 계산,<br />
+          학교 시설물 찾기까지 — 학교생활의 모든 것을 한 곳에서.
+        </p>
+      </section>
+
+      <!-- 기능 카드 -->
+      <section>
+        <p class="section-label">주요 기능</p>
+        <div class="features-grid">
+
+          <a href="timetable.html" class="feature-card timetable">
+            <div class="feature-icon">📅</div>
+            <h2 class="feature-title">시간표</h2>
+            <p class="feature-desc">
+              요일별 수업 시간표를 한눈에 확인하세요.
+              과목, 교실, 선생님 정보를 깔끔하게 볼 수 있어요.
+            </p>
+            <div class="feature-arrow">
+              바로가기 <span>→</span>
+            </div>
+          </a>
+
+          <a href="grade-calculator.html" class="feature-card grade">
+            <div class="feature-icon">📊</div>
+            <h2 class="feature-title">내신 등급 계산기</h2>
+            <p class="feature-desc">
+              과목별 단위수와 등급을 입력하면 평균 내신 등급을 자동으로 계산해드려요.
+            </p>
+            <div class="feature-arrow">
+              바로가기 <span>→</span>
+            </div>
+          </a>
+
+          <a href="facility-finder/index.html" class="feature-card facility">
+            <div class="feature-icon">🗺️</div>
+            <h2 class="feature-title">시설물 길찾기</h2>
+            <p class="feature-desc">
+              학교 건물 층별 시설물 위치를 확인하고, 목적지까지의 경로를 안내받으세요.
+            </p>
+            <div class="feature-arrow">
+              바로가기 <span>→</span>
+            </div>
+          </a>
+
+        </div>
+      </section>
+
+      <!-- 하단 안내 -->
+      <div class="info-section">
+        <div class="info-icon">💡</div>
+        <div class="info-text">
+          <strong>SCHOOL MATE에 오신 걸 환영합니다!</strong>
+          <p>위 메뉴나 카드를 클릭해서 각 기능을 이용해 보세요. 모든 기능은 스마트폰에서도 편하게 쓸 수 있어요.</p>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <script>
+    // ── 모바일 메뉴 토글 ──────────────────────────────
+    const navToggle = document.getElementById('navToggle');
+    const mobileMenu = document.getElementById('mobileMenu');
+
+    function openMenu() {
+      mobileMenu.classList.add('open');
+      navToggle.classList.add('open');
+      navToggle.setAttribute('aria-expanded', 'true');
+      navToggle.setAttribute('aria-label', '메뉴 닫기');
+    }
+
+    function closeMenu() {
+      mobileMenu.classList.remove('open');
+      navToggle.classList.remove('open');
+      navToggle.setAttribute('aria-expanded', 'false');
+      navToggle.setAttribute('aria-label', '메뉴 열기');
+    }
+
+    navToggle.addEventListener('click', (e) => {
+      e.stopPropagation();
+      mobileMenu.classList.contains('open') ? closeMenu() : openMenu();
+    });
+
+    // 메뉴 링크 클릭 시 닫기
+    mobileMenu.querySelectorAll('.nav-link').forEach(link => {
+      link.addEventListener('click', closeMenu);
+    });
+
+    // 외부 클릭 시 닫기
+    document.addEventListener('click', (e) => {
+      if (!navToggle.contains(e.target) && !mobileMenu.contains(e.target)) {
+        closeMenu();
+      }
+    });
+
+    // ESC 키로 닫기
+    document.addEventListener('keydown', (e) => {
+      if (e.key === 'Escape') closeMenu();
+    });
+  </script>
+
+</body>
+</html>
